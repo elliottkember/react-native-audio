@@ -65,7 +65,7 @@ RCT_EXPORT_MODULE();
 }
 
 - (void)startProgressTimer {
-  _progressUpdateInterval = 250;
+  _progressUpdateInterval = 10;
   _prevProgressUpdateTime = nil;
 
   [self stopProgressTimer];
@@ -185,6 +185,8 @@ RCT_EXPORT_METHOD(startRecording)
 {
   if (!_audioRecorder.recording) {
     [self startProgressTimer];
+    UInt32 audioRouteOverride = kAudioSessionOverrideAudioRoute_Speaker;
+    AudioSessionSetProperty (kAudioSessionProperty_OverrideAudioRoute,sizeof (audioRouteOverride),&audioRouteOverride);
     [_recordSession setActive:YES error:nil];
     [_audioRecorder record];
 
